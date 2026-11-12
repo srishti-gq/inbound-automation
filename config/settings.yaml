@@ -1,0 +1,38 @@
+# General settings. Paths are relative to the project folder.
+data_dir: data                 # database + stored copies of every uploaded file (git-ignored)
+database_file: inbound.db
+batch_id_prefix: IB            # Batch ID format: IB-YYYYMMDD-NN (calling date + sequence)
+
+# Text found inside number/date cells that means "no value".
+# These are stored as missing (never as 0) and raise a data exception.
+missing_value_markers:
+  - "Not Available"
+  - "Upfront Data Not Found"
+  - "NA"
+  - "N/A"
+  - "-"
+  - ""
+
+# A case is created when the Application ID is in the portfolio and has
+# overdue > threshold OR charges > threshold.
+min_amount_threshold: 0
+
+# DPD bucket ranges (inclusive). Applied to the portfolio DPD (overdue days).
+dpd_buckets:
+  - {label: "0-30",    min: 0,   max: 30}
+  - {label: "31-60",   min: 31,  max: 60}
+  - {label: "61-90",   min: 61,  max: 90}
+  - {label: "91-180",  min: 91,  max: 180}
+  - {label: "181-360", min: 181, max: 360}
+  - {label: "360+",    min: 361, max: 100000}
+
+# Case type label: overdue > 0 -> "DPD Bucket", else -> "Charges" (same as current manual Main_Data)
+case_type_labels:
+  overdue: "DPD Bucket"
+  charges_only: "Charges"
+
+# CM names in the allocation file that are NOT real CMs (case-insensitive "contains" match).
+# Cases with these values go to the "Allocation on hold" exception for manual assignment.
+non_cm_allocation_patterns:
+  - "hold"
+  - "not in allocation"

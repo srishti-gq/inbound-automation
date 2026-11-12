@@ -1,0 +1,59 @@
+# Column mapping for every source file.
+# For each field, list the header names that may be used (matching ignores case, spaces, dots, underscores).
+# The sheet whose header row matches the most fields is picked automatically.
+# Fields marked under `required` must be found, otherwise the upload is rejected with a clear message.
+
+inbound:
+  required: [app_ids]
+  fields:
+    call_time:        ["Date", "Call Date", "Call Time", "Timestamp"]
+    calling_mobile:   ["Calling Mobile", "Caller Number", "Mobile"]
+    student_name:     ["Student Name (DB)", "Student Name", "Name of Student"]
+    institute:        ["Institute (DB)", "Institute", "Institute Name"]
+    issue_category:   ["Issue Category", "Category"]
+    issue_details:    ["Issue Details", "Concern", "Customer Concern"]
+    outcome:          ["Outcome", "Call Outcome"]
+    app_ids:          ["App ID", "App IDs", "Application ID", "GQ Application ID"]
+    live_app_ids:     ["Loan Live App ID"]
+    closed_app_ids:   ["Loan Closed App ID"]
+    panel_stage:      ["Stage"]
+    recording_url:    ["Recording URL", "Recording"]
+  # app_ids may contain several IDs in one cell, separated by any of these
+  id_separators: [",", ";", "/", "|", "\n"]
+
+portfolio:
+  required: [app_id, overdue, charges, dpd]
+  fields:
+    app_id:            ["GQ Application ID", "Application ID", "App ID"]
+    loan_stage:        ["Loan Stage", "Stage"]
+    lender:            ["LENDER", "Lender Name"]
+    overdue:           ["Current Overdue Amount", "Overdue Amount", "Current Overdue"]
+    charges:           ["Total Charges Outstanding Amount", "Pending Charges", "Charges Outstanding"]
+    dpd:               ["Current Overdue days", "DPD", "Overdue Days"]
+    emi_amount:        ["EMI Amount"]
+    emi_outstanding:   ["Total EMI Outstanding Amount"]
+    total_paid:        ["Total Payment made till date"]
+    last_payment_date: ["Last Payment Date"]
+    last_unpaid_due:   ["Last Unpaid EMI Due Date"]
+
+allocation:   # overdue CM allocation file (e.g. October_Data)
+  required: [app_id, cm_name]
+  fields:
+    app_id:        ["GQ Application IDs", "GQ Application ID", "Application ID", "App ID"]
+    cm_name:       ["CM Name"]
+    agent_name:    ["Name", "Agent Name"]
+    student_name:  ["Name of Student", "Student Name"]
+    parent_name:   ["Parent Name"]
+    mobile:        ["Mobile Number", "Mobile"]
+    institute:     ["Institute Name", "Institute"]
+    remark:        ["Remark"]
+    alloc_date:    ["Date", "Allocation Date"]
+    alloc_dpd:     ["DPD"]
+
+charges_allocation:   # optional – charges team allocation (info only for now)
+  required: [app_id, charges_cm]
+  fields:
+    app_id:      ["APP ID", "App ID", "Application ID"]
+    charges_cm:  ["Name", "CM Name"]
+    lot:         ["Lot"]
+    code:        ["Code"]
