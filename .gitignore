@@ -1,0 +1,24 @@
+# Never commit customer / loan data
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+data/
+uploads/
+
+# Secrets
+.env
+*.json.key
+credentials*.json
+token*.json
+
+# Python / tooling
+__pycache__/
+*.pyc
+.venv/
+venv/
+.streamlit/secrets.toml
+*.db
+*.sqlite
+.DS_Store
+.vscode/
