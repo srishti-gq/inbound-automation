@@ -1,35 +1,33 @@
-"""Settings: source file history, column mapping, rules, audit log."""
+"""Settings – column mapping, business rules, audit log."""
 from __future__ import annotations
 
 import streamlit as st
 
-from core import config, sources
+from core import config
 from core.db import query_df
-from views.common import show_table
+from views.common import page_header, show_table
 
 
 def _yaml_editor(path, key):
-    text = st.text_area("YAML", config.read_text(path), height=420, key=key)
-    if st.button("Save", key=key + "_save", type="primary"):
+    text = st.text_area("Configuration", config.read_text(path), height=440, key=key, label_visibility="collapsed")
+    if st.button("Save changes", key=key + "_save", type="primary"):
         try:
             config.save_yaml_text(path, text)
-            st.success("Saved. New uploads will use this configuration (existing batches are not changed).")
+            st.success("Saved. Applies to new uploads; existing batches are not changed.")
         except Exception as e:  # noqa: BLE001
             st.error(f"Not saved – invalid configuration: {e}")
 
 
 def render():
-    st.title("⚙️ Settings")
-    t = st.tabs(["Source file history", "Column mapping", "Business rules", "Audit log"])
+    page_header("Settings", "Configuration used when reading files and creating batches")
+    t = st.tabs(["Column mapping", "Business rules", "Audit log"])
     with t[0]:
-        st.caption("Every uploaded file is kept as a separate version. Batches always point to the exact version they used.")
-        show_table(sources.list_sources())
-    with t[1]:
-        st.caption("For each field, list the possible column headers. Matching ignores case, spaces and punctuation, "
-                   "so new file formats can be supported without code changes.")
+        st.caption("Possible column headers for each field. Matching ignores case, spaces and punctuation.")
         _yaml_editor(config.MAPPING_FILE, "map")
-    with t[2]:
-        st.caption("DPD buckets, missing-value markers, hold patterns and thresholds.")
+    with t[1]:
+        st.caption("DPD buckets, missing-value markers, hold patterns and Batch ID prefix.")
         _yaml_editor(config.SETTINGS_FILE, "settings")
-    with t[3]:
-        show_table(query_df("SELECT ts, user, action, batch_id, detail FROM audit_log ORDER BY id DESC LIMIT 500"), height=500)
+    with t[2]:
+        show_table(query_df(
+            "SELECT ts AS Time, user AS User, action AS Action, batch_id AS Batch, detail AS Detail "
+            "FROM audit_log ORDER BY id DESC LIMIT 500"), height=480)

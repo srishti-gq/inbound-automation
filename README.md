@@ -36,16 +36,19 @@ Requires **Python 3.10 or newer** (check with `python --version`).
 
 Run the automated tests (synthetic data only): `pytest -q`
 
-## How to use (Phase 1)
+## How to use
 
-1. **Upload Inbound Report → Step 1**: upload the *Loan Live Portfolio* and the *CM Allocation (Overdue)* file
-   (and optionally the *Charges Allocation*). Set the data date of each file. You only re-upload when you have a newer file.
-2. **Step 2**: upload the inbound calling report. Check the preview (calls, App IDs, detected columns).
-3. **Step 3**: confirm the calling date and file versions → **Process & create batch**.
-4. **CM-wise Allocation**: assign a CM to unassigned cases (not in allocation file / on Hold), review CM totals,
-   download CM-wise case lists.
-5. **Batch Management**: full report per batch (Excel download), calls, all App IDs, exceptions, audit trail.
-6. **Exception Management**: review and resolve exceptions with a note.
+The menu has five pages:
+
+| Page | What it is for |
+|---|---|
+| **Dashboard** | Totals across all batches, recent batches, source file dates |
+| **New Batch** | Upload the inbound calling report → preview → **Create batch** |
+| **Batches** | Pick a batch. Tabs: **Allocation** (assign CMs to unassigned cases, CM-wise summary, DPD pivot), **Cases** (filter by CM, download CM list), **Exceptions**, **Calls**, **History** |
+| **Source Files** | Upload a new Loan Live Portfolio / CM Allocation / Charges Allocation when you have a newer file |
+| **Settings** | Column mapping, business rules, audit log |
+
+Typical run: Source Files (only when files changed) → New Batch → Batches → Allocation tab → download report.
 
 ## Processing rules (same as the manual Main_Data sheet)
 
@@ -74,6 +77,8 @@ Run the automated tests (synthetic data only): `pytest -q`
 
 ```
 app.py                 Streamlit entry point + navigation
+assets/                logo
+.streamlit/config.toml theme
 core/                  processing logic (no UI)
   excel_io.py          sheet / header / column auto-detection
   sources.py           portfolio & allocation file versions + lookups

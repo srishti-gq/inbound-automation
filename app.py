@@ -6,29 +6,18 @@ Run from the project folder:
 import streamlit as st
 
 from core.db import init_db
-from views import allocation, batches, exceptions, overview, placeholders, settings_page, upload
+from views import batches, common, dashboard, new_batch, settings_page, source_files
 
-st.set_page_config(page_title="Inbound Recovery Dashboard", page_icon="📞", layout="wide")
+st.set_page_config(page_title="Inbound Recovery | GrayQuest", page_icon="assets/logo.svg", layout="wide")
 init_db()
+common.apply_style()
+st.logo("assets/logo.svg", size="large")
 
-pages = {
-    "Home": [
-        st.Page(overview.render, title="Dashboard Overview", icon="🏠", url_path="overview", default=True),
-    ],
-    "Inbound Processing": [
-        st.Page(upload.render, title="Upload Inbound Report", icon="📤", url_path="upload"),
-        st.Page(batches.render, title="Batch Management", icon="🗂️", url_path="batches"),
-        st.Page(allocation.render, title="CM-wise Allocation", icon="👥", url_path="allocation"),
-        st.Page(exceptions.render, title="Exception Management", icon="⚠️", url_path="exceptions"),
-    ],
-    "Follow-up (coming next)": [
-        st.Page(placeholders.email, title="Email Management", icon="✉️", url_path="email"),
-        st.Page(placeholders.recheck, title="Outstanding Recheck", icon="🔁", url_path="recheck"),
-        st.Page(placeholders.mis, title="MIS & History", icon="📑", url_path="mis"),
-        st.Page(placeholders.analytics, title="Recovery Analytics", icon="📈", url_path="analytics"),
-    ],
-    "Admin": [
-        st.Page(settings_page.render, title="Settings", icon="⚙️", url_path="settings"),
-    ],
-}
-st.navigation(pages).run()
+common.PAGES.update({
+    "dashboard": st.Page(dashboard.render, title="Dashboard", icon=":material/space_dashboard:", default=True),
+    "new_batch": st.Page(new_batch.render, title="New Batch", icon=":material/upload_file:", url_path="new-batch"),
+    "batches": st.Page(batches.render, title="Batches", icon=":material/folder_open:", url_path="batches"),
+    "sources": st.Page(source_files.render, title="Source Files", icon=":material/database:", url_path="source-files"),
+    "settings": st.Page(settings_page.render, title="Settings", icon=":material/settings:", url_path="settings"),
+})
+st.navigation(list(common.PAGES.values())).run()
