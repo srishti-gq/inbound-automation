@@ -42,10 +42,14 @@ def _card(kind: str, required: bool):
                 st.rerun()
 
 
-def render():
-    page_header("Source Files", "Upload a new version whenever you have a newer file. Older versions are kept.")
+def show_saved_message():
     if msg := st.session_state.pop("src_msg", None):
         st.success(msg)
+
+
+def render():
+    page_header("Source Files", "Upload a new version whenever you have a newer file. Older versions are kept.")
+    show_saved_message()
     cols = st.columns(3, gap="medium")
     for col, (kind, req) in zip(cols, KINDS):
         with col:

@@ -43,12 +43,12 @@ The menu has five pages:
 | Page | What it is for |
 |---|---|
 | **Dashboard** | Totals across all batches, recent batches, source file dates |
-| **New Batch** | Upload the inbound calling report → preview → **Create batch** |
+| **Upload Inbound Report** | Upload the inbound calling report → preview → **Create batch** |
 | **Batches** | Pick a batch. Tabs: **Allocation** (assign CMs to unassigned cases, CM-wise summary, DPD pivot), **Cases** (filter by CM, download CM list), **Exceptions**, **Calls**, **History** |
 | **Source Files** | Upload a new Loan Live Portfolio / CM Allocation / Charges Allocation when you have a newer file |
 | **Settings** | Column mapping, business rules, audit log |
 
-Typical run: Source Files (only when files changed) → New Batch → Batches → Allocation tab → download report.
+Typical run: Source Files (only when files changed) → Upload Inbound Report → Batches → Allocation tab → download report.
 
 ## Processing rules (same as the manual Main_Data sheet)
 

@@ -1,4 +1,4 @@
-"""New Batch – upload the inbound calling report and create a batch."""
+"""Upload Inbound Report – upload the inbound calling report and create a batch."""
 from __future__ import annotations
 
 import tempfile
@@ -11,6 +11,8 @@ import streamlit as st
 from core import batch as batch_mod
 from core import inbound, sources
 from views.common import PAGES, page_header, show_table
+from views.source_files import _card as source_card
+from views.source_files import show_saved_message
 
 
 def _version_select(kind: str, label: str, optional: bool = False):
@@ -26,19 +28,32 @@ def _version_select(kind: str, label: str, optional: bool = False):
 
 
 def render():
-    page_header("New Batch", "Upload the report from the inbound calling panel. Each upload becomes a separate batch.")
+    page_header("Upload Inbound Report",
+                "Upload the report from the inbound calling panel. Each upload becomes a separate batch.")
 
+    show_saved_message()
     pf, al = sources.latest_source("portfolio"), sources.latest_source("allocation")
-    if pf is None or al is None:
-        st.warning("Upload the Loan Live Portfolio and CM Allocation files first.")
-        st.page_link(PAGES["sources"], label="Go to Source Files", icon=":material/arrow_forward:")
-        return
-    st.markdown(
-        f"<div class='muted'>Using portfolio dated <b>{pf['as_of_date']}</b> and CM allocation dated "
-        f"<b>{al['as_of_date']}</b>.</div>", unsafe_allow_html=True)
-    st.write("")
+    missing = [k for k, v in (("portfolio", pf), ("allocation", al)) if v is None]
+    if missing:
+        st.subheader("Step 1 · Upload source files")
+        st.markdown("<div class='muted'>Needed once before the first batch, and again only when you have newer "
+                    "files. The inbound report is matched against these.</div>", unsafe_allow_html=True)
+        st.write("")
+        cols = st.columns(2, gap="medium")
+        for col, kind in zip(cols, missing):
+            with col:
+                source_card(kind, True)
+        st.write("")
+        st.subheader("Step 2 · Upload inbound calling report")
+    else:
+        st.markdown(
+            f"<div class='muted'>Matching against portfolio dated <b>{pf['as_of_date']}</b> and CM allocation dated "
+            f"<b>{al['as_of_date']}</b>. Newer files? Update them in Source Files.</div>", unsafe_allow_html=True)
+        st.write("")
 
-    f = st.file_uploader("Inbound calling report (.xlsx / .xls)", type=["xlsx", "xls"], key="up_inbound")
+    f = st.file_uploader("Inbound calling report (.xlsx / .xls)", type=["xlsx", "xls"], key="up_inbound",
+                         disabled=bool(missing),
+                         help="Upload the source files above first." if missing else None)
     if f is None:
         return
 

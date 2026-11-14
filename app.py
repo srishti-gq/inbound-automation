@@ -15,7 +15,7 @@ st.logo("assets/logo.svg", size="large")
 
 common.PAGES.update({
     "dashboard": st.Page(dashboard.render, title="Dashboard", icon=":material/space_dashboard:", default=True),
-    "new_batch": st.Page(new_batch.render, title="New Batch", icon=":material/upload_file:", url_path="new-batch"),
+    "new_batch": st.Page(new_batch.render, title="Upload Inbound Report", icon=":material/upload_file:", url_path="upload"),
     "batches": st.Page(batches.render, title="Batches", icon=":material/folder_open:", url_path="batches"),
     "sources": st.Page(source_files.render, title="Source Files", icon=":material/database:", url_path="source-files"),
     "settings": st.Page(settings_page.render, title="Settings", icon=":material/settings:", url_path="settings"),

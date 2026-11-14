@@ -135,7 +135,7 @@ def render():
         bid = batch_selector("batch_sel")
     if not bid:
         st.info("No batches yet.")
-        st.page_link(PAGES["new_batch"], label="Create a batch", icon=":material/arrow_forward:")
+        st.page_link(PAGES["new_batch"], label="Upload an inbound report", icon=":material/arrow_forward:")
         return
 
     b = batch_mod.get_batch(bid)

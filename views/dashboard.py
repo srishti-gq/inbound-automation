@@ -12,7 +12,12 @@ from views.common import PAGES, inr, page_header, show_table
 
 
 def render():
-    page_header("Dashboard", "Inbound calling follow-up summary across all batches")
+    head, btn = st.columns([4, 1], vertical_alignment="center")
+    with head:
+        page_header("Dashboard", "Inbound calling follow-up summary across all batches")
+    with btn:
+        if st.button("Upload inbound report", type="primary", icon=":material/upload_file:", width="stretch"):
+            st.switch_page(PAGES["new_batch"])
 
     tot = query_df(
         """SELECT COUNT(*) AS cases, COALESCE(SUM(orig_overdue),0) AS overdue,
@@ -36,7 +41,7 @@ def render():
         b = batch_mod.list_batches()
         if b.empty:
             st.info("No batches yet.")
-            st.page_link(PAGES["new_batch"], label="Create the first batch", icon=":material/arrow_forward:")
+            st.page_link(PAGES["new_batch"], label="Upload the first inbound report", icon=":material/arrow_forward:")
         else:
             view = b.head(10).rename(columns={
                 "batch_id": "Batch ID", "calling_date": "Calling date", "total_cases": "Cases",
