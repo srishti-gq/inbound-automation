@@ -65,9 +65,12 @@ def _cases_tab(bid: str, k: pd.DataFrame):
         b.download_button("Download CM list", reports.cm_workbook(bid, cm), width="stretch",
                           file_name=f"{bid}_{cm.replace(' ', '_')}.xlsx", icon=":material/download:")
     st.caption(f"{len(disp)} cases · Overdue {inr(disp['Overdue'].sum())} · Charges {inr(disp['Charges'].sum())}")
-    cols = ["Application ID", "Student Name", "Institute", "Overdue", "Charges", "DPD (Days)", "DPD Bucket",
-            "Case Type", "CM / Team", "Issue Category", "Customer Concern", "Calling Mobile"]
-    show_table(disp[cols], height=480)
+    cols = ["Application ID", "Student Name", "Overdue", "Charges", "DPD (Days)", "DPD Bucket",
+            "Case Type", "CM / Team", "Issue Category", "Customer Concern", "Institute", "Calling Mobile"]
+    show_table(disp[cols], height=480, column_config_extra={
+        "Customer Concern": st.column_config.TextColumn(width="large"),
+        "Student Name": st.column_config.TextColumn(width="medium"),
+    })
 
 
 def _exceptions_tab(bid: str):

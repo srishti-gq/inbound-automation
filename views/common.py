@@ -73,11 +73,12 @@ MONEY_COLS = {"Overdue", "Charges", "Total Overdue", "Total Charges", "Total Out
               "Sum of Overdue", "Sum of Charges"}
 
 
-def show_table(df: pd.DataFrame, height: int | None = None, **kw):
+def show_table(df: pd.DataFrame, height: int | None = None, column_config_extra: dict | None = None, **kw):
     if df is None or df.empty:
         st.markdown("<div class='muted'>No records.</div>", unsafe_allow_html=True)
         return
     cfg = {c: st.column_config.NumberColumn(c, format="localized") for c in df.columns if c in MONEY_COLS}
+    cfg.update(column_config_extra or {})
     args = dict(width="stretch", hide_index=True, column_config=cfg, **kw)
     if height:
         args["height"] = height
